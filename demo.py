@@ -35,6 +35,7 @@ st.markdown(
 st.write(" Rows: %s, Columns: %s" % dataset.shape)
 
 
+st.subheader("Apriori Algorithm")
 value = apriori(dataset, min_support=0.05, use_colnames=True, verbose=0)
 st.write(value)
 
