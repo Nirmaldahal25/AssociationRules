@@ -47,7 +47,14 @@ if nav_value == DATATASET_SAMPLE:
         > Fig: 1
     """
     )
-    st.write(" Rows: %s, Columns: %s" % dataset.shape)
+    st.write(
+        " Transactions: %s, <br/> Columns: %s" % dataset.shape, unsafe_allow_html=True
+    )
+
+    frequency_set = dataset.agg(["sum"]).T
+    frequency_set.rename_axis(["Items"], inplace=True)
+    st.dataframe(frequency_set, use_container_width=True)
+
 
 elif nav_value in [APRIORI, FP_GROWTH]:
     CONFIDENCE = "confidence"
