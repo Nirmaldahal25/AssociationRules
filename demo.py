@@ -23,7 +23,7 @@ def get_dataframe(filename):
 
 
 # header
-st.header("Data Mining Mini Project")
+# st.header("Data Mining Mini Project")
 nav_value = st.sidebar.radio(
     "Navigations", options=[DATATASET_SAMPLE, APRIORI, FP_GROWTH]
 )
@@ -39,13 +39,13 @@ if nav_value == DATATASET_SAMPLE:
         It uses association rules to find patterns in purchase history and optimize product placement, pricing, and marketing. 
         It can help to improve customer understanding, inventory management, pricing strategies, and sales growth.
 
-    """
-    )
+    """)
+    st.write(""" The following dataset was used:
+""")
+    
     st.dataframe(dataset, use_container_width=True)
-    st.markdown(
-        """
-        > Fig: 1
-    """
+    st.caption(
+        "Table 1: Transaction Matrix of the dataset"
     )
     st.write(
         " Transactions: %s, <br/> Columns: %s" % dataset.shape, unsafe_allow_html=True
@@ -55,6 +55,7 @@ if nav_value == DATATASET_SAMPLE:
     frequency_set.rename_axis(["Items"], inplace=True)
     st.dataframe(frequency_set, use_container_width=True)
 
+    st.write("In the dataset we have: ", " Rows: %s, and Columns: %s." % dataset.shape)
 
 elif nav_value in [APRIORI, FP_GROWTH]:
     CONFIDENCE = "confidence"
