@@ -3,6 +3,7 @@ import pandas as pd
 from mlxtend.frequent_patterns import apriori, association_rules, fpgrowth
 import time
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 INTRODUCTION = "Introduction"
 APRIORI = "Apriori Algorithm"
@@ -61,7 +62,6 @@ if nav_value == INTRODUCTION:
     )
 
     frequency_set = dataset.agg(["sum"]).T
-    st.write(frequency_set.columns)
     frequency_set.rename_axis(["Items"], inplace=True)
     frequency_set.sort_values("sum", ascending=False, inplace=True)
     st.dataframe(frequency_set, use_container_width=True)
@@ -194,3 +194,23 @@ elif nav_value in [APRIORI, FP_GROWTH]:
                      Conversely, a lift less than 1 indicates that the items are unlikely to be bought together. 
                      A lift of exactly 1 implies that the probability of occurrence of the antecedent and that of the consequent are independent of each other."""
             )
+
+        filtered_data = association[
+            (association["length"] >= min_items_number)
+            & (association["length"] <= max_items_number)
+        ]
+
+        st.subheader("RelationShip Between The Metrics")
+        fig, axes = plt.subplots(2, 2, figsize=(15, 15))
+        plt.style.use("seaborn-v0_8")
+        # Plotting the relationship between the metrics
+        sns.scatterplot(ax=axes[0][0], x="support", y="confidence", data=filtered_data)
+        sns.scatterplot(ax=axes[0][1], x="support", y="lift", data=filtered_data)
+        sns.scatterplot(ax=axes[1][0], x="confidence", y="lift", data=filtered_data)
+        sns.scatterplot(
+            ax=axes[1][1],
+            x="antecedent support",
+            y="consequent support",
+            data=filtered_data,
+        )
+        st.pyplot(fig)
