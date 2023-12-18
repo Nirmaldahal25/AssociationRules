@@ -28,6 +28,9 @@ def get_dataframe(filename):
 # st.header("Data Mining Mini Project")
 nav_value = st.sidebar.radio("Navigations", options=[INTRODUCTION, APRIORI, FP_GROWTH])
 
+# Filtering Conditions For Itemset Length
+max_items_number = 0
+min_items_number = 0
 
 dataset = get_dataframe("dataset/groceries.csv")
 
@@ -111,7 +114,19 @@ elif nav_value in [APRIORI, FP_GROWTH]:
         unsafe_allow_html=True,
     )
     st.subheader("Frequent Itemsets")
-    st.table(value)
+    value["length"] = value["itemsets"].apply(lambda x: len(x))
+    min_items_number = st.slider(
+        label="Min Item Length", min_value=0, max_value=value["length"].max()
+    )
+    max_items_number = st.slider(
+        label="Max Item Length", min_value=0, max_value=value["length"].max()
+    )
+    st.table(
+        value[
+            (value["length"] >= min_items_number)
+            & (value["length"] <= max_items_number)
+        ]
+    )
     st.subheader("Support")
     st.write(
         """Support refers to the relative frequency of an item set in a dataset. 
@@ -138,7 +153,21 @@ elif nav_value in [APRIORI, FP_GROWTH]:
         st.subheader("Metrics")
 
         association = association_rules(value, metric=metric, min_threshold=threshold)
-        st.write(association)
+        association["antecedent_length"] = association["antecedents"].apply(
+            lambda x: len(x)
+        )
+        association["consequent_length"] = association["consequents"].apply(
+            lambda x: len(x)
+        )
+        association["length"] = (
+            association["consequent_length"] + association["antecedent_length"]
+        )
+        st.write(
+            association[
+                (association["length"] >= min_items_number)
+                & (association["length"] <= max_items_number)
+            ]
+        )
 
         if metric == CONFIDENCE:
             st.write(
