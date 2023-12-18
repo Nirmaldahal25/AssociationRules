@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from mlxtend.frequent_patterns import apriori, association_rules, fpgrowth
 import time
+import matplotlib.pyplot as plt
 
 INTRODUCTION = "Introduction"
 APRIORI = "Apriori Algorithm"
@@ -57,9 +58,21 @@ if nav_value == INTRODUCTION:
     )
 
     frequency_set = dataset.agg(["sum"]).T
+    st.write(frequency_set.columns)
     frequency_set.rename_axis(["Items"], inplace=True)
+    frequency_set.sort_values("sum", ascending=False, inplace=True)
     st.dataframe(frequency_set, use_container_width=True)
     st.caption("Table 2: Frequency of items in the dataset")
+
+    slider_value = st.slider(
+        "Support Items In Graph", min_value=0, max_value=frequency_set.shape[0], step=10
+    )
+    fig, ax = plt.subplots()
+    plt.xticks(rotation="vertical", fontsize=6)
+    ax.plot(frequency_set.head(slider_value))
+    plt.ylabel("Support")
+    plt.xlabel("Items")
+    st.pyplot(fig, use_container_width=True)
 
 
 elif nav_value in [APRIORI, FP_GROWTH]:
