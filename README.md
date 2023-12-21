@@ -26,12 +26,20 @@ Streamlit is integrated into the project for dynamic and interactive data visual
 
 To run the code locally, follow these steps:
 
-1. Clone the repository:
+1. Clone the repository.
+2. Setting Up a Virtual Environment and Installing Dependencies:
    
-2. Run the following command:
-  ```python
-   streamlit run demo.py
-   ```
+   ```bash
+   # Create a Virtual Environment
+   python3 -m venv venv
+   
+   # Activate the Virtual Environment (Linux/macOS)
+   source venv/bin/activate
+   
+   # Install Packages from requirements.txt
+   pip install -r requirements.txt
+   
+4. Run the following command:
   
-
-
+   ```python
+   streamlit run demo.py
